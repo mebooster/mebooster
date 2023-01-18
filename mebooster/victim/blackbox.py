@@ -25,12 +25,6 @@ import mebooster.utils.model as model_utils
 import mebooster.models.zoo as zoo
 from mebooster import datasets
 
-__author__ = "Tribhuvanesh Orekondy"
-__maintainer__ = "Tribhuvanesh Orekondy"
-__email__ = "orekondy@mpi-inf.mpg.de"
-__status__ = "Development"
-
-
 class Blackbox(object):
     def __init__(self, model, device=None, output_type='probs', topk=None, rounding=None):
         self.device = torch.device('cuda') if device is None else device
