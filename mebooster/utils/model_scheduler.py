@@ -133,7 +133,6 @@ def train_step(model, train_loader, train_gt_loader=None, criterion=None, optimi
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    #一个训练过程
     i=0
     log_offset = 1e-20
     det_offset = 1 # #1e-6
@@ -478,7 +477,7 @@ def train_model(model, trainset, trainset_gt=None, out_path=None, blackbox=None,
                                           )
 
     #How
-    if weighted_loss:#loss 是有权重的
+    if weighted_loss:
         if not isinstance(trainset.samples[0][1], int):
             print('Labels in trainset is of type: {}. Expected: {}.'.format(type(trainset.samples[0][1]), int))
 
@@ -505,7 +504,7 @@ def train_model(model, trainset, trainset_gt=None, out_path=None, blackbox=None,
     start_epoch = 1
     best_train_acc, train_acc = -1., -1.
     best_test_acc, test_acc, test_loss, best_fidelity= -1., -1., -1., -1.
-    # Resume if required 从某个模型继续训练
+    # Resume if required
     if resume is not None:
         model_path = resume
         if osp.isfile(model_path):
@@ -533,8 +532,8 @@ def train_model(model, trainset, trainset_gt=None, out_path=None, blackbox=None,
 
     # model_out_path = osp.join(out_path, '{}_50000.pth.tar'.format(s_m))
     model_out_path = osp.join(out_path, 'checkpoint_{}.pth.tar'.format(checkpoint_suffix))
-    for epoch in range(start_epoch, epochs + 1): #1，101
-        #在这里就跑完了一个epoch
+    for epoch in range(start_epoch, epochs + 1):
+        
         if imp_vic_mem:
             train_loss, train_acc = train_step_vmi(model, train_loader, train_gt_loader, criterion_train, optimizer, epoch,
                                                device, log_interval,
