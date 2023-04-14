@@ -137,7 +137,7 @@ class GetAdversary(object):
         torch.manual_seed(cfg.DEFAULT_SEED)
         torch.cuda.manual_seed(cfg.DEFAULT_SEED)
 
-        self.idx_set = set(range(len(self.queryset))) #idx根据queryset进行更改的
+        self.idx_set = set(range(len(self.queryset)))
         self.transferset = []
         self.transfery = []
 
@@ -152,7 +152,7 @@ class GetAdversary(object):
         Y_vec_true = []
         print("get_initial_centers")
         assert self.attack_model is not None, "attack_model made a mistake!"
-        for b in range(int(np.ceil(len(self.pre_idxset)/self.batch_size))): #不是这么回事
+        for b in range(int(np.ceil(len(self.pre_idxset)/self.batch_size))):
             # print("b = ", b)
             # print("pre_dixset = ", self.pre_idxset)
             x_idx = self.pre_idxset[(b * self.batch_size): min(((b+1) * self.batch_size), len(self.pre_idxset))]
@@ -177,7 +177,7 @@ class GetAdversary(object):
         with tqdm(total=k) as pbar:
             if self.sampling_method == 'initial_seed' or self.sampling_method == 'training_data' or\
                 self.sampling_method == 'label':
-                for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+                for t, B in enumerate(range(start_B, end_B, self.batch_size)):
                     # print("start", B)
                     if self.sampling_method == 'training_data':
                         self.q_idx_set = set(range(60000))
@@ -186,15 +186,13 @@ class GetAdversary(object):
                         self.q_idx_set = copy.copy(self.idx_set)
 
                     idxs = np.random.choice(list(self.q_idx_set), replace=False,
-                                            size=min(self.batch_size, k-len(self.pre_idxset)))  # 8，200-目前拥有的transferset的大小。
+                                            size=min(self.batch_size, k-len(self.pre_idxset)))
                     print("initial_seed_idxs", idxs)
-                    #这就是选出的idx了
                     for index in idxs:
                         if index >= cfg.trainingbound:
                             self.no_training_in_initial += 1
 
                     self.idx_set = self.idx_set - set(idxs)
-                    #这里存储 选出的pre_idxset
                     self.pre_idxset = np.append(self.pre_idxset, idxs)
                     # print("idx,", idxs)
                     if len(self.idx_set) == 0:
@@ -204,7 +202,6 @@ class GetAdversary(object):
                     x_t = torch.stack([self.queryset[i][0] for i in idxs]).to(self.blackbox.device)
                     y_t = self.blackbox(x_t).cpu()
 
-                    #目前全部按照ChainDataset来说
                     if hasattr(self.queryset, 'samples'):
                         # Any DatasetFolder (or subclass) has this attribute # Saving image paths are space-efficient
                         img_t = [self.queryset.samples[i][0] for i in idxs]  # Image paths
@@ -227,7 +224,7 @@ class GetAdversary(object):
                     pbar.update((x_t.size(0)))
             elif self.sampling_method == 'use_default_initial':
                 assert len(initial_seed) > 0, 'has no input initial seed!'
-                chosed_idx = [list(self.idx_set)[int(e)] for e in initial_seed]  # 让idx_set减去这个chosed_idx；已经做出了选择
+                chosed_idx = [list(self.idx_set)[int(e)] for e in initial_seed]
                 self.idx_set = self.idx_set - set(chosed_idx)
                 self.pre_idxset = np.append(self.pre_idxset, chosed_idx)
                 print("self.pre_idxset:", self.pre_idxset)
@@ -399,11 +396,11 @@ def main():
             'modelfamily']
         print("modelfamily,", modelfamily)
         break
-    # 目前全来自一个家族MNIST
+        
     transform_query = datasets.modelfamily_to_transforms[modelfamily]['train']
 
     # ----------- Set up testset
-    test_dataset_name = params['testdataset']  # 用的是MNIST test
+    test_dataset_name = params['testdataset']
     test_modelfamily = datasets.dataset_to_modelfamily[test_dataset_name]
     test_transform = datasets.modelfamily_to_transforms[test_modelfamily]['test']
     print("test_transform:", test_transform.__dict__.keys())
@@ -411,7 +408,7 @@ def main():
     if queryset_name == 'ImageFolder':
         assert params['root'] is not None, 'argument "--root ROOT" required for ImageFolder'
         queryset = datasets.__dict__[queryset_name](root=params['root'], transform=test_transform)
-    elif len(queryset_names) > 1:  # 拥有多个dataset
+    elif len(queryset_names) > 1:
         qns = "ChainMNIST"
         for qn in queryset_names:
             if qn.find("CIFAR10") == 0:
@@ -425,7 +422,7 @@ def main():
 
     # ----------- Initialize blackbox
     blackbox_dir = params['victim_model_dir']
-    blackbox, num_classes = Blackbox.from_modeldir_split(blackbox_dir, device)  # 这里可以获得victim_model
+    blackbox, num_classes = Blackbox.from_modeldir_split(blackbox_dir, device)
     blackbox.eval()
 
     # ----------- Initialize adversary
@@ -436,17 +433,17 @@ def main():
     if test_dataset_name not in valid_datasets:
         raise ValueError('Dataset not found. Valid arguments = {}'.format(valid_datasets))
     test_dataset = datasets.__dict__[test_dataset_name]
-    testset = test_dataset(train=False, transform=test_transform)  # 这里是可以下载的
+    testset = test_dataset(train=False, transform=test_transform)
 
     model_parser = argparse.ArgumentParser(description='PyTorch ImageNet Testing')
     model_args = parser_params.add_parser_params(model_parser)
 
-    # ----------- Set up queryset:总数据库
-    print("\ndownload queryset dataset")  # 数据加载
+    # ----------- Set up queryset
+    print("\ndownload queryset dataset")
 
     shadow_attack_model = None
     print('=> constructing transfer set...')
-    adversary = GetAdversary(blackbox, queryset, batch_size=batch_size)  # 新建了一个类
+    adversary = GetAdversary(blackbox, queryset, batch_size=batch_size)
     # ----------- get #'initial_seed'
     # if params['sampling_method'] == 'label':
     #     transferset_o, pre_idxset_ = adversary.get_transferset(k=params['initial_seed'],
@@ -541,7 +538,7 @@ def main():
                 s_queryset = datasets.__dict__[queryset_name](train=True, transform=test_transform)
             print("query_set:", len(queryset))
             # transform_query = datasets.modelfamily_to_transforms[modelfamily]['train']
-            s_adversary = GetAdversary(blackbox, s_queryset, batch_size=batch_size) #新建了一个类
+            s_adversary = GetAdversary(blackbox, s_queryset, batch_size=batch_size) 
 
             shadow_mode_path = osp.join(shadow_model_dir, sm_m)
             if not osp.exists(shadow_mode_path):
@@ -595,7 +592,7 @@ def main():
                     print("start training shadow_attack_model")
                     shadow_model = Blackbox(shadow_model, device, 'probs')
                 else:
-                    num_classes = 10  # 先设一个，对mnist
+                    num_classes = 10  #mnist
                     p_shadow = argparse.ArgumentParser(description='Train a model')
                     args_shadow = p_shadow.parse_args()
                     p_save = vars(args_shadow)
@@ -631,7 +628,7 @@ def main():
                     print("start training shadow_attack_model")
 
             transferset_shadow_out = adversary.get_transferset_shadow_out(
-                shadow_out_len=len(shadow_set))  # 不去管ma_method
+                shadow_out_len=len(shadow_set))
             shadow_set_out = samples_to_transferset(transferset_shadow_out, budget=len(transferset_shadow_out),
                                                     transform=test_transform)
             print("shadow_model used out of training dataset:", len(shadow_set_out))
@@ -727,7 +724,7 @@ def main():
 
         # -----initial
         # torch.manual_seed(cfg.DEFAULT_SEED)
-        torch.cuda.manual_seed(cfg.DEFAULT_SEED)  # 使 model的初始化方式一样
+        torch.cuda.manual_seed(cfg.DEFAULT_SEED)
         b = 0
         out_path = osp.join(attack_model_dir, cfg.queryset)
         if not osp.exists(out_path):
@@ -792,7 +789,7 @@ def main():
                 #     attack_model, _ = Blackbox.from_modeldir_split_attack_mode(out_path,
                 #                                                                'checkpoint_{}.pth.tar'.format(
                 #                                                                    checkpoint_suffix), device)
-                #     adversary.set_attack_model(attack_model, device)  # 将attack model输入
+                #     adversary.set_attack_model(attack_model, device)
                 #
                 #     if params['sampling_method'] == 'membership_attack':  # membership
                 #         print("params['ma-method']:", params['ma_method'])
@@ -823,7 +820,7 @@ def main():
                 #                                                                pre_idxset=pre_idxset_,
                 #                                                                shadow_attack_model=shadow_attack_model,
                 #                                                                second_sss=params[
-                #                                                                    'second_sss'])  # 不去管ma_method
+                #                                                                    'second_sss'])
                 #
                 #     print("choose_finished: transformset_o:", len(transferset_o))
                 #     # change_to_trainable_set
@@ -850,14 +847,14 @@ def main():
                 with open(time_out_path, 'a') as jf:  # change
                     json.dump(it_time, jf, indent=True)
 
-            print("pre+idexset", pre_idxset_)  # 显示data的idx
+            print("pre+idexset", pre_idxset_)
         else:
             print("No implemented")
 
 
         # ----- Store transferomet_o to transferset.pickle
-        # out_path = params['out_dir']  # 输出adv的结果
-        # transfer_out_path = osp.join(out_path, 'transferset.pickle')  # 序列化储存格式
+        # out_path = params['out_dir']
+        # transfer_out_path = osp.join(out_path, 'transferset.pickle')
         # with open(transfer_out_path, 'wb') as wf:
         #     pickle.dump(transferset, wf)
         # print('=> transfer set ({} samples) written to: {}'.format(len(transferset), transfer_out_path))
