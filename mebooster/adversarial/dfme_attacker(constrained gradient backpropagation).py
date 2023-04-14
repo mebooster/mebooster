@@ -510,7 +510,7 @@ def main():
         start_time.append(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))#this means the end of read initial seed #2
 
         # -----initial
-        torch.cuda.manual_seed(cfg.DEFAULT_SEED)  # 使 model的初始化方式一样
+        torch.cuda.manual_seed(cfg.DEFAULT_SEED)
         b = 0
         out_path = osp.join(attack_model_dir, cfg.test_dataset)# cfg.queryset
         if not osp.exists(out_path):
