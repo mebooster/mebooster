@@ -129,7 +129,6 @@ class TinyImagesSubset(ImageFolder):
         self.chain = ['CIFAR10']
 
 class ChainCIFAR(TVCIFAR10):
-    #目前就提供三个以内的chain
     def __init__(self, chain=['CIFAR10', 'CIFAR100', "SVHN"], train=True, transform=None, target_transform=None, download=True):
         # super(ChainCIFAR, self).__init__(train=train, transform=transform, target_transform=target_transform, download=download)
         self.chain = chain
@@ -207,9 +206,9 @@ class ChainCIFAR(TVCIFAR10):
             else:
                 self.targets.append(self.datasets[i].targets)
         # self.data = [self.datasets[0].data, self.datasets[1].data]
-        # self.targets = [self.datasets[0].targets, self.datasets[1].targets]#SVHN的label是target
+        # self.targets = [self.datasets[0].targets, self.datasets[1].targets]
 
-    def getitemsinchain(self, idxs):  # 来自numpy.random
+    def getitemsinchain(self, idxs):  # numpy.random
         img_t = np.zeros(len(idxs)).tolist()
         gt_label = np.zeros(len(idxs)).tolist()
         for i, idx in enumerate(idxs):
