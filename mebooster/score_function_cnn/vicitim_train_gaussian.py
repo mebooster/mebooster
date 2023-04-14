@@ -143,8 +143,8 @@ def main():
                         help='number of epochs to train (default: 100)')
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                         help='learning rate (default: 0.1)') #0.1
-    # parser.add_argument("--l2_reg_lambda", default=0.001, help="L2 regularization lambda")#** 没用
-    # parser.add_argument("--dropout_keep_prob", default=0.5, help="Dropout keep probability")#** 没用
+    # parser.add_argument("--l2_reg_lambda", default=0.001, help="L2 regularization lambda")
+    # parser.add_argument("--dropout_keep_prob", default=0.5, help="Dropout keep probability")
     parser.add_argument('--momentum', type=float, default=0.5, metavar='M',
                         help='SGD momentum (default: 0.5)')
     parser.add_argument('--log-interval', type=int, default=100, metavar='N',
