@@ -1,7 +1,5 @@
 """
-Bayesian Dark Knowledge
------------------------
-Korattikara, et. al., 2015
+Korattikara, et. al.,Bayesian Dark Knowledge, 2015
 """
 import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
