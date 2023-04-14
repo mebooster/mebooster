@@ -141,7 +141,7 @@ class GetAdversary(object):
         torch.manual_seed(cfg.DEFAULT_SEED)
         torch.cuda.manual_seed(cfg.DEFAULT_SEED)
 
-        self.idx_set = set(range(len(self.queryset))) #idx根据queryset进行更改的
+        self.idx_set = set(range(len(self.queryset)))
         self.transferset = []
         self.transfery = []
 
@@ -156,7 +156,7 @@ class GetAdversary(object):
         Y_vec_true = []
         print("get_initial_centers")
         assert self.attack_model is not None, "attack_model made a mistake!"
-        for b in range(int(np.ceil(len(self.pre_idxset)/self.batch_size))): #不是这么回事
+        for b in range(int(np.ceil(len(self.pre_idxset)/self.batch_size))):
             # print("b = ", b)
             # print("pre_dixset = ", self.pre_idxset)
             x_idx = self.pre_idxset[(b * self.batch_size): min(((b+1) * self.batch_size), len(self.pre_idxset))]
@@ -181,7 +181,7 @@ class GetAdversary(object):
         with tqdm(total=k) as pbar:
             if self.sampling_method == 'initial_seed' or self.sampling_method == 'training_data' or\
                 self.sampling_method == 'label':
-                for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+                for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;step：8
                     # print("start", B)
                     if self.sampling_method == 'training_data':
                         self.q_idx_set = set(range(60000))
@@ -190,15 +190,15 @@ class GetAdversary(object):
                         self.q_idx_set = copy.copy(self.idx_set)
 
                     idxs = np.random.choice(list(self.q_idx_set), replace=False,
-                                            size=min(self.batch_size, k-len(self.pre_idxset)))  # 8，200-目前拥有的transferset的大小。
+                                            size=min(self.batch_size, k-len(self.pre_idxset)))  # 8，200 size of transferset
                     print("initial_seed_idxs", idxs)
-                    #这就是选出的idx了
+                    #idxs
                     for index in idxs:
                         if index >= cfg.trainingbound:
                             self.no_training_in_initial += 1
 
                     self.idx_set = self.idx_set - set(idxs)
-                    #这里存储 选出的pre_idxset
+                    #pre_idxset
                     self.pre_idxset = np.append(self.pre_idxset, idxs)
                     # print("idx,", idxs)
                     if len(self.idx_set) == 0:
@@ -208,7 +208,6 @@ class GetAdversary(object):
                     x_t = torch.stack([self.queryset[i][0] for i in idxs]).to(self.blackbox.device)
                     y_t = self.blackbox(x_t).cpu()
 
-                    #目前全部按照ChainDataset来说
                     if hasattr(self.queryset, 'samples'):
                         # Any DatasetFolder (or subclass) has this attribute # Saving image paths are space-efficient
                         img_t = [self.queryset.samples[i][0] for i in idxs]  # Image paths
@@ -231,7 +230,7 @@ class GetAdversary(object):
                     pbar.update((x_t.size(0)))
             elif self.sampling_method == 'use_default_initial':
                 assert len(initial_seed) > 0, 'has no input initial seed!'
-                chosed_idx = [list(self.idx_set)[int(e)] for e in initial_seed]  # 让idx_set减去这个chosed_idx；已经做出了选择
+                chosed_idx = [list(self.idx_set)[int(e)] for e in initial_seed]
                 self.idx_set = self.idx_set - set(chosed_idx)
                 self.pre_idxset = np.append(self.pre_idxset, chosed_idx)
                 print("self.pre_idxset:", self.pre_idxset)
@@ -284,7 +283,7 @@ class GetAdversary(object):
                         X_rest.append(x_p.cpu())
                         Y_copy.append(y_p)
                         copy_bar.update(b)
-                X_rest = np.concatenate(X_rest) #对应的X_idx 就是idx_set
+                X_rest = np.concatenate(X_rest)
                 Y_copy = np.concatenate(Y_copy)
                 #sss = SubsetSelectionStrategy
                 if sampling_method == 'kcenter': #4
@@ -430,8 +429,8 @@ class GetAdversary(object):
                 s = s.squeeze()
                 # print('sss.get_subset:', s)
                 #finished kcenter choose
-                # x_t = [X[e] for e in s] #是被选择的Y的idx
-                chosed_idx = [list(self.idx_set)[int(e)] for e in s] #让idx_set减去这个chosed_idx；已经做出了选择
+                # x_t = [X[e] for e in s]
+                chosed_idx = [list(self.idx_set)[int(e)] for e in s] #idx_set-chosed_idx
                 self.idx_set = self.idx_set - set(chosed_idx)
                 self.pre_idxset = np.append(self.pre_idxset, chosed_idx)
                 print("self.pre_idxset:", self.pre_idxset)
@@ -583,8 +582,8 @@ class GetAdversary(object):
         transferset_shadow_out = []
         with tqdm(total=shadow_out_len) as pbar:
             shadow_idx_set_out = set(np.random.choice(list(self.idx_set), replace=False,
-                                    size=shadow_out_len))  # 8，200-目前拥有的transferset的大小。
-            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+                                    size=shadow_out_len))
+            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;step:8
                 idxs = list(shadow_idx_set_out)[t*self.batch_size : min((t+1)*self.batch_size, end_B)]
                 if hasattr(self.queryset, 'samples'):
                     # Any DatasetFolder (or subclass) has this attribute # Saving image paths are space-efficient
@@ -620,7 +619,7 @@ class GetAdversary(object):
         with tqdm(total=k) as pbar:
             shadow_idx_set = set(range(cfg.start_shadow, cfg.start_shadow+int(cfg.shadow_data/2)))#120000
             shadow_idx_set_out = set(range(cfg.start_shadow_out, cfg.start_shadow_out+int(cfg.shadow_data/2))) #124800 emnist 58750
-            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+            for t, B in enumerate(range(start_B, end_B, self.batch_size)):
                 idxs = list(shadow_idx_set)[t*self.batch_size : min((t+1)*self.batch_size, end_B)]
                 if hasattr(self.queryset, 'samples'):
                     # Any DatasetFolder (or subclass) has this attribute # Saving image paths are space-efficient
@@ -645,7 +644,7 @@ class GetAdversary(object):
                     gt[gt_label[i]] = 1.
                     transferset_shadow.append((img_t_i, gt))
                 pbar.update(len(idxs))
-            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+            for t, B in enumerate(range(start_B, end_B, self.batch_size)):
                 idxs = list(shadow_idx_set_out)[t*self.batch_size : min((t+1)*self.batch_size, end_B)]
                 if hasattr(self.queryset, 'samples'):
                     # Any DatasetFolder (or subclass) has this attribute # Saving image paths are space-efficient
@@ -666,7 +665,7 @@ class GetAdversary(object):
                     img_t_i = img_p_i.squeeze() if isinstance(img_p_i, np.ndarray) else img_p_i
                     # img_t_i = img_t[i].squeeze() if isinstance(img_t[i], np.ndarray) else img_t[i]
                     gt = torch.zeros([10])
-                    gt[0] = 1. #这里因为有多个种类
+                    gt[0] = 1. 
                     transferset_shadow2.append((img_t_i, gt))
                 pbar.update(len(idxs))
         return transferset_shadow, transferset_shadow2
@@ -680,7 +679,7 @@ class GetAdversary(object):
         with tqdm(total=k) as pbar:
             shadow_idx_set = set(range(cfg.start_shadow_test, cfg.start_shadow_test+int(k/2)))#120000
             shadow_idx_set_out = set(range(cfg.start_shadow_out_test, cfg.start_shadow_out_test+int(k/2))) #124800 emnist 58750
-            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+            for t, B in enumerate(range(start_B, end_B, self.batch_size)):
                 idxs = list(shadow_idx_set)[t*self.batch_size : min((t+1)*self.batch_size, end_B)]
                 x_s = torch.stack([self.queryset[i][0] for i in idxs]).to(self.attack_device)
                 y_s = self.blackbox(x_s).cpu().numpy()
@@ -688,7 +687,7 @@ class GetAdversary(object):
                     y_shadow.append(y_s[i])
                     target_shadow.append(1)
                 pbar.update(len(idxs))
-            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+            for t, B in enumerate(range(start_B, end_B, self.batch_size)):
                 idxs = list(shadow_idx_set_out)[t*self.batch_size : min((t+1)*self.batch_size, end_B)]
                 x_s = torch.stack([self.queryset[i][0] for i in idxs]).to(self.attack_device)
                 y_s = self.blackbox(x_s).cpu().numpy()
@@ -706,7 +705,7 @@ class GetAdversary(object):
         transferset_unsuper = []
         with tqdm(total=k) as pbar:
             unsuper_idx_set = set(range(50000, 50000+int(cfg.unsuper_data)))#184800
-            for t, B in enumerate(range(start_B, end_B, self.batch_size)):  # 1,200;步长：8
+            for t, B in enumerate(range(start_B, end_B, self.batch_size)):
                 idxs = list(unsuper_idx_set)[t*self.batch_size : min((t+1)*self.batch_size, end_B)]
                 if hasattr(self.queryset, 'samples'):
                     # Any DatasetFolder (or subclass) has this attribute # Saving image paths are space-efficient
@@ -839,7 +838,7 @@ def train_bi_classifier(shadow_model, shadow_set, shadow_set_out, batch_size=10,
                                                         n_hidden=64,
                                                         l2_ratio=1e-6,
                                                         model='softmax',
-                                                        shadow_model_path=shadow_model_path) #仅仅是一个softmax模型
+                                                        shadow_model_path=shadow_model_path)
     return shadow_attack_model
 
 def load_bi_classifier(shadow_model, shadow_set, shadow_set_out, batch_size=10, num_workers=10, device = 'cuda', shadow_model_path='data'):
@@ -868,7 +867,7 @@ def load_bi_classifier(shadow_model, shadow_set, shadow_set_out, batch_size=10, 
                                                         n_hidden=64,
                                                         l2_ratio=1e-6,
                                                         model='softmax',
-                                                        shadow_model_path=shadow_model_path) #仅仅是一个softmax模型
+                                                        shadow_model_path=shadow_model_path)
     return shadow_attack_model
 
 def over_initial_cnn(w1_dir1, w1_dir2,  w1_dir3, w1_dir4, w1_dir5, channel=3):
@@ -970,7 +969,7 @@ def main():
 
     # ----------- Initialize blackbox
     blackbox_dir = params['victim_model_dir']
-    blackbox, num_classes = Blackbox.from_modeldir_split(blackbox_dir, device)  # 这里可以获得victim_model
+    blackbox, num_classes = Blackbox.from_modeldir_split(blackbox_dir, device)  #victim_model
     blackbox.eval()
 
     # ----------- Initialize adversary
@@ -981,17 +980,17 @@ def main():
     if test_dataset_name not in valid_datasets:
         raise ValueError('Dataset not found. Valid arguments = {}'.format(valid_datasets))
     test_dataset = datasets.__dict__[test_dataset_name]
-    testset = test_dataset(train=False, transform=test_transform)  # 这里是可以下载的
+    testset = test_dataset(train=False, transform=test_transform)
 
     model_parser = argparse.ArgumentParser(description='PyTorch ImageNet Testing')
     model_args = parser_params.add_parser_params(model_parser)
 
-    # ----------- Set up queryset:总数据库
-    print("\ndownload queryset dataset")  # 数据加载
+    # ----------- Set up queryset
+    print("\ndownload queryset dataset")
 
     shadow_attack_model = None
     print('=> constructing transfer set...')
-    adversary = GetAdversary(blackbox, queryset, batch_size=batch_size)  # 新建了一个类
+    adversary = GetAdversary(blackbox, queryset, batch_size=batch_size)
     # ----------- get #'initial_seed'
     if params['sampling_method'] == 'label':
         transferset_o, pre_idxset_ = adversary.get_transferset(k=params['initial_seed'],
@@ -1068,13 +1067,13 @@ def main():
             for i, qname in enumerate(s_queryset_names):
                 if qname.find("-") > -1:
                     qname = qname.split("-")[0]
-                if qname not in valid_datasets:  # 几大data family
+                if qname not in valid_datasets:  # data family
                     raise ValueError('Dataset not found. Valid arguments = {}, qname= {}'.format(valid_datasets, qname))
 
             if s_queryset_name == 'ImageFolder':
                 assert params['root'] is not None, 'argument "--root ROOT" required for ImageFolder'
                 s_queryset = datasets.__dict__[queryset_name](root=params['root'], transform=test_transform)
-            elif len(s_queryset_names) > 1:  # 拥有多个dataset
+            elif len(s_queryset_names) > 1:  #dataset
                 qns = "ChainMNIST"
                 for qn in s_queryset_names:
                     if qn.find("CIFAR10") == 0:
@@ -1087,7 +1086,7 @@ def main():
                 s_queryset = datasets.__dict__[queryset_name](train=True, transform=test_transform)
             print("query_set:", len(queryset))
             # transform_query = datasets.modelfamily_to_transforms[modelfamily]['train']
-            s_adversary = GetAdversary(blackbox, s_queryset, batch_size=batch_size) #新建了一个类
+            s_adversary = GetAdversary(blackbox, s_queryset, batch_size=batch_size)
 
             shadow_mode_path = osp.join(shadow_model_dir, sm_m)
             if not osp.exists(shadow_mode_path):
@@ -1273,7 +1272,7 @@ def main():
 
         # -----initial
         # torch.manual_seed(cfg.DEFAULT_SEED)
-        torch.cuda.manual_seed(cfg.DEFAULT_SEED)  # 使 model的初始化方式一样
+        torch.cuda.manual_seed(cfg.DEFAULT_SEED)
         b = 0
         out_path = osp.join(attack_model_dir, cfg.queryset)
         if not osp.exists(out_path):
@@ -1330,10 +1329,9 @@ def main():
                 # print(params)
 
                 checkpoint_suffix = '{}'.format(b)
-                # 训练标准, function, will return a cross-entropy loss
 
-                # 训练 攻击模型  # attack_model_dir 是 attack_model_output_dir # testset comes from mnist-test # checkpoint_suffix 后缀
-                # ----- Train #transferset_是用于训练的数据
+                # attack_model_dir 是 attack_model_output_dir # testset comes from mnist-test # checkpoint_suffix
+                # ----- Train #transferset
                 it_time.append(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')) #4
 
                 if False:#it==0:
@@ -1355,7 +1353,7 @@ def main():
                     attack_model, _ = Blackbox.from_modeldir_split_attack_mode(out_path,
                                                                                'checkpoint_{}.pth.tar'.format(
                                                                                    checkpoint_suffix), device)
-                    adversary.set_attack_model(attack_model, device)  # 将attack model输入
+                    adversary.set_attack_model(attack_model, device)
 
                     if params['sampling_method'] == 'membership_attack':  # membership
                         print("params['ma-method']:", params['ma_method'])
@@ -1386,7 +1384,7 @@ def main():
                                                                                pre_idxset=pre_idxset_,
                                                                                shadow_attack_model=shadow_attack_model,
                                                                                second_sss=params[
-                                                                                   'second_sss'])  # 不去管ma_method
+                                                                                   'second_sss'])
 
                     print("choose_finished: transformset_o:", len(transferset_o))
                     # change_to_trainable_set
@@ -1413,14 +1411,14 @@ def main():
                 with open(time_out_path, 'a') as jf:  # change
                     json.dump(it_time, jf, indent=True)
 
-            print("pre+idexset", pre_idxset_)  # 显示data的idx
+            print("pre+idexset", pre_idxset_)
         else:
             print("No implemented")
 
 
         # ----- Store transferomet_o to transferset.pickle
-        # out_path = params['out_dir']  # 输出adv的结果
-        # transfer_out_path = osp.join(out_path, 'transferset.pickle')  # 序列化储存格式
+        # out_path = params['out_dir']
+        # transfer_out_path = osp.join(out_path, 'transferset.pickle')
         # with open(transfer_out_path, 'wb') as wf:
         #     pickle.dump(transferset, wf)
         # print('=> transfer set ({} samples) written to: {}'.format(len(transferset), transfer_out_path))
