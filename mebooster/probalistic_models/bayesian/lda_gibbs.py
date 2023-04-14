@@ -1,6 +1,5 @@
 """
 LDA with Gibbs Sampler
-======================
 Reference: Kevin Murphy's book Ch. 27
 """
 import numpy as np
