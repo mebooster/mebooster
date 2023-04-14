@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Ref:
+Reference:
     https://github.com/NVIDIA/apex/blob/f5cd5ae937f168c763985f627bbf850648ea5f3f/examples/imagenet/main_amp.py#L256
 """
 import torch
