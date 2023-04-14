@@ -1,6 +1,5 @@
 """
 Kernel topic model with Gibbs Sampler
-=====================================
 Reference: Hennig et al., 2012 & Murphy's MLPP book Ch. 27
 """
 import numpy as np
