@@ -1,6 +1,5 @@
 """
 LDA with Gibbs Sampler
-======================
 Reference: Blei DM, Kucukelbir A, McAuliffe JD. Variational inference: A review for statisticians. Journal of the American Statistical Association. 2017.
 """
 import numpy as np
