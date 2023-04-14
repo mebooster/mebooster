@@ -21,12 +21,6 @@ from torchvision.datasets.folder import ImageFolder, default_loader
 
 import mebooster.config as cfg
 
-__author__ = "Tribhuvanesh Orekondy"
-__maintainer__ = "Tribhuvanesh Orekondy"
-__email__ = "orekondy@mpi-inf.mpg.de"
-__status__ = "Development"
-
-
 class Caltech256(ImageFolder):
 
     def __init__(self, train=True, transform=None, target_transform=None):
