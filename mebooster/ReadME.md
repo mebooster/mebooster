@@ -15,25 +15,25 @@ The output path is './data_ini/...', which is set in the file.
 ===
 3, Try to Run MAZE and DFME attacks
 Run mebooster/adversarial/dfme_attacker.py
-It can perform the experiments (Baseline; Width Expansion; MEBooste without layer-by-layer guided training).
+It can perform the experiments (Baseline; Width Expansion; MEBooste without constrained gradient backpropagation).
 For any attacks, set the params in config.py: test_dataset, attack_model_arch, victim_model_arch.
 
 ===
-4, Try to run layer-wise training after MAZE and DFME attacks
-Run mebooster/adversarial/dfme_attacker(layer-by-layer guided training).py
-It can perform the experiments (MEBooster; MEbooster with regular post processing training).
+4, Try to run constrained gradient backpropagation after MAZE and DFME attacks
+Run mebooster/adversarial/dfme_attacker(constrained gradient backpropagation).py
+It can perform the experiments (MEBooster; MEbooster with regular fine-tuning).
 
 ===
 5, Try to Run Pool-based attacks
 Run mebooster/adversarial/pool_based_attacker.py
-It can perform the experiments (Baseline; Width Expansion; MEBooste without layer-by-layer guided training).
+It can perform the experiments (Baseline; Width Expansion; MEBooste without constrained gradient backpropagation).
 The model/model extraction results are in 'models/adversary/ADV_DIR/f{cfg.test_dataset}';
 The data generated are in './dfme_data/data_dfme'
 
 ===
-6, Try to run layer-wise training after pool-based attacks
-Run mebooster/adversarial/pool_based_attacker(layer-by-layer guided training).py
-It can perform the experiments (MEBooster; MEbooster with regular post processing training).
+6, Try to run constrained gradient backpropagation after pool-based attacks
+Run mebooster/adversarial/pool_based_attacker(constrained gradient backpropagation).py
+It can perform the experiments (MEBooster; MEbooster with regular fine-tuning).
 
 ===
 7, Run Transfer learning related experiments
