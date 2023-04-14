@@ -70,7 +70,6 @@ def train_step_vmi(model, train_loader, train_gt_loader=None, criterion=None, op
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    #一个训练过程
     i=0
     for batch_idx, (inputs, targets) in enumerate(train_loader):
         inputs, targets = inputs.to(device), targets.to(device)
@@ -133,7 +132,6 @@ def train_step(model, train_loader, train_gt_loader=None, criterion=None, optimi
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    #一个训练过程
     i=0
     log_offset = 1e-20
     det_offset = 1 # #1e-6
