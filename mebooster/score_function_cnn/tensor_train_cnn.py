@@ -210,7 +210,7 @@ class GetAdversary(object):
         Y_vec_true = []
         print("get_initial_centers")
         assert self.attack_model is not None, "attack_model made a mistake!"
-        for b in range(int(np.ceil(len(self.pre_idxset)/self.batch_size))): #不是这么回事
+        for b in range(int(np.ceil(len(self.pre_idxset)/self.batch_size))):
             # print("b = ", b)
             # print("pre_dixset = ", self.pre_idxset)
             x_idx = self.pre_idxset[(b * self.batch_size): min(((b+1) * self.batch_size), len(self.pre_idxset))]
@@ -264,7 +264,7 @@ class GetAdversary(object):
                         idxs = initial_seed[bs*self.batch_size: min((bs+1)*self.batch_size, len(initial_seed))].astype(int)
                     else:
                         idxs = np.random.choice(list(self.q_idx_set), replace=False,
-                                            size=min(self.batch_size, k-len(self.pre_idxset)))  # 8，200-目前拥有的transferset的大小。
+                                            size=min(self.batch_size, k-len(self.pre_idxset)))
 
                     self.idx_set = self.idx_set - set(idxs)
                     self.pre_idxset = np.append(self.pre_idxset, idxs)
@@ -296,7 +296,7 @@ class GetAdversary(object):
 
             elif self.sampling_method == 'use_default_initial':
                 assert len(initial_seed) > 0, 'has no input initial seed!'
-                chosed_idx = [list(self.idx_set)[int(e)] for e in initial_seed]  # 让idx_set减去这个chosed_idx；已经做出了选择
+                chosed_idx = [list(self.idx_set)[int(e)] for e in initial_seed]
                 self.idx_set = self.idx_set - set(chosed_idx)
                 self.pre_idxset = np.append(self.pre_idxset, chosed_idx)
                 print("self.pre_idxset:", self.pre_idxset)
