@@ -74,7 +74,6 @@ def train_step_vmi(model, train_loader, train_gt_loader=None, criterion=None, op
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    #一个训练过程
     i=0
     for batch_idx, (inputs, targets) in enumerate(train_loader):
         inputs, targets = inputs.to(device), targets.to(device)
@@ -137,7 +136,6 @@ def train_step(model, train_loader, train_gt_loader=None, criterion=None, optimi
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    #一个训练过程
     i=0
     for batch_idx, (inputs, targets) in enumerate(train_loader):
         inputs, targets = inputs.to(device), targets.to(device)
@@ -199,7 +197,6 @@ def train_step_special(model, train_loader, train_gt_loader=None, criterion=None
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    #一个训练过程
     i=0
     loss_fn = torch.nn.MSELoss(reduction='mean')
     for batch_idx, (inputs, targets) in enumerate(train_loader):
@@ -259,7 +256,6 @@ def train_step_special_hidden(model, train_loader, train_gt_loader=None, criteri
     train_loss_batch = 0
     epoch_size = len(train_loader.dataset)
     t_start = time.time()
-    # 一个训练过程
     i = 0
     loss_fn = torch.nn.MSELoss(reduction='mean')
     if layer == 1:
@@ -513,7 +509,7 @@ def train_model(model, ori_model, layer, trainset, trainset_gt=None, out_path=No
                                           )
 
     #How
-    if weighted_loss:#loss 是有权重的
+    if weighted_loss:
         if not isinstance(trainset.samples[0][1], int):
             print('Labels in trainset is of type: {}. Expected: {}.'.format(type(trainset.samples[0][1]), int))
 
@@ -540,7 +536,7 @@ def train_model(model, ori_model, layer, trainset, trainset_gt=None, out_path=No
     start_epoch = 1
     best_train_acc, train_acc = -1., -1.
     best_test_acc, test_acc, test_loss, best_fidelity= -1., -1., -1., -1.
-    # Resume if required 从某个模型继续训练
+    # Resume if required
     if resume is not None:
         model_path = resume
         if osp.isfile(model_path):
@@ -570,7 +566,6 @@ def train_model(model, ori_model, layer, trainset, trainset_gt=None, out_path=No
     model_out_path = osp.join(out_path, 'checkpoint{}.pth.tar'.format(checkpoint_suffix))
     if not cfg.layer_by_layer:
         for epoch in range(start_epoch, epochs + 1):  # 1，101
-            # 在这里就跑完了一个epoch
             # if imp_vic_mem:
             #     train_loss, train_acc = train_step_vmi(model, train_loader, train_gt_loader, criterion_train, optimizer, epoch,
             #                                        device, log_interval,
