@@ -28,7 +28,7 @@ To obtain a victim model, execute the following:
 python mebooster/victim/train.py
 ```
 
-Configuration for the output path is located in `config.py` under the `VICTIM_DIR` variable.
+Configuration for the output path is located in `config.py` under the `mebooster` variable.
 
 ### 2. Parameter Estimation
 
@@ -69,5 +69,4 @@ python mebooster/adversarial/pool_based_attacker.py
 ```
 
 This will perform baseline, width expansion, and MEBooster variations without constrained gradient backpropagation. Results are stored in `models/adversary/ADV_DIR/f{cfg.test_dataset}`, and generated data are saved under `./dfme_data/data_dfme`.
-![Uploading image.png…]()
 
