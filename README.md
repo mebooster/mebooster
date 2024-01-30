@@ -8,7 +8,7 @@ Welcome to the official repository of "MEBooster: A General Booster Framework fo
 
 ## **Overview**
 
-MEBooster introduces a two-phased approach: an initial bootstrapping phase followed by a constrained gradient backpropagation phase in post-processing. This methodology has demonstrated a significant fidelity gain of up to 58.10% in image classification tasks.
+MEBooster introduces a two-phased approach: an initial bootstrapping phase followed by a constrained gradient backpropagation phase in post-processing. This methodology has demonstrated a significant fidelity gain of up to 58.10%.
 
 ## **Supported Model Extraction Attacks**
 
