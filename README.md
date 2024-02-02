@@ -2,9 +2,9 @@
   <img src="mebooster.png" width="80" alt="Logo">
 </p>
 
-# **MEBooster: A General Booster Framework for Learning-Based Model Extraction**
+# **Unlocking Hight-Fidelity Learning: Towards Neuron-Grained Model Extraction**
 
-Welcome to the official repository of "MEBooster: A General Booster Framework for Learning-Based Model Extraction." This work is dedicated to advancing the field of model extraction by shifting the focus from selecting optimal query samples to enhancing the training process itself. Our novel contribution, MEBooster, is a versatile training booster framework designed to seamlessly integrate with all existing model extraction techniques.
+Welcome to the official repository of "Unlocking Hight-Fidelity Learning: Towards Neuron-Grained Model Extraction". This work is dedicated to advancing the field of model extraction by shifting the focus from selecting optimal query samples to enhancing the training process itself. Our novel contribution, MEBooster, is a versatile training booster framework designed to seamlessly integrate with all existing model extraction techniques.
 
 ## **Overview**
 
@@ -50,17 +50,15 @@ python mebooster/adversarial/dfme_attacker.py
 
 Adjust attack parameters in `config.py`, specifying `test_dataset`, `attack_model_arch`, and `victim_model_arch`.
 
-### 4. Constrained Gradient Backpropagation
+### 4. Post-processing Fine Tuning
 
-After executing MAZE and DFME attacks, apply constrained gradient backpropagation by running:
+After executing MAZE and DFME attacks, apply post-processing fine tuning by running:
 
 ```bash
-python mebooster/adversarial/dfme_attacker(constrained_gradient_backpropagation).py
+python mebooster/adversarial/dfme_attacker(post-processing).py
 ```
 
 This script facilitates experiments with MEBooster and regular fine-tuning.
-
-### 5. Pool-Based Attacks
 
 For pool-based attacks, execute:
 
@@ -68,5 +66,5 @@ For pool-based attacks, execute:
 python mebooster/adversarial/pool_based_attacker.py
 ```
 
-This will perform baseline, width expansion, and MEBooster variations without constrained gradient backpropagation. Results are stored in `models/adversary/ADV_DIR/f{cfg.test_dataset}`, and generated data are saved under `./dfme_data/data_dfme`.
+This will perform baseline, width expansion, and MEBooster variations without fine-tuning. Results are stored in `models/adversary/ADV_DIR/f{cfg.test_dataset}`, and generated data are saved under `./dfme_data/data_dfme`.
 
