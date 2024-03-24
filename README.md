@@ -2,9 +2,9 @@
   <img src="mebooster.png" width="80" alt="Logo">
 </p>
 
-# **Unlocking Hight-Fidelity Learning: Towards Neuron-Grained Model Extraction**
+# **Unlocking High-Fidelity Learning: Towards Neuron-Grained Model Extraction**
 
-Welcome to the official repository of "Unlocking Hight-Fidelity Learning: Towards Neuron-Grained Model Extraction". This work is dedicated to advancing the field of model extraction by shifting the focus from selecting optimal query samples to enhancing the training process itself. Our novel contribution, MEBooster, is a versatile training booster framework designed to seamlessly integrate with all existing model extraction techniques.
+Welcome to the official repository of "Unlocking High-Fidelity Learning: Towards Neuron-Grained Model Extraction". This work is dedicated to advancing the field of model extraction by shifting the focus from selecting optimal query samples to enhancing the training process itself. Our novel contribution, MEBooster, is a versatile training booster framework designed to seamlessly integrate with all existing model extraction techniques.
 
 ## **Overview**
 
