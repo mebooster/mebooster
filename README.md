@@ -40,12 +40,12 @@ python mebooster/adversarial/moment-based_parameter_estimation.py
 
 Parameters for estimation are specified within the script. The output path defaults to `./data_ini/...`.
 
-### 3. Executing MAZE and DFME Attacks
+### 3. Executing DisGUIDE, MAZE and DFME Attacks
 
 To perform MAZE and DFME attacks, including baseline, width expansion, and MEBooster variations without constrained gradient backpropagation, use:
 
 ```bash
-python mebooster/adversarial/dfme_attacker.py
+python mebooster/adversarial/dfme_attacker.py attack_type='DISGUIDE'/'MAZE'/'DFME'
 ```
 
 Adjust attack parameters in `config.py`, specifying `test_dataset`, `attack_model_arch`, and `victim_model_arch`.
