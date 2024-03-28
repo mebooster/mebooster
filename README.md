@@ -16,8 +16,8 @@ MEBooster enhances three cutting-edge model extraction attacks:
 
 - **[ActiveThief](https://github.com/gopalaniyengar/activethief):** A pool-based model extraction technique.
 - **[DFME](https://github.com/cake-lab/datafree-model-extraction):** A data-free model extraction approach.
-- **[MAZE](https://github.com/sanjaykariyappa/MAZE):** Another data-free model extraction strategy.
-
+- **[MAZE](https://github.com/sanjaykariyappa/MAZE):** A data-free model extraction strategy.
+- **[DisGUIDE](https://github.com/lin-tan/disguide):** A data-free model extraction strategy.
 ## **Getting Started**
 
 ### 1. Victim Models
