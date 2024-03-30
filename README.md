@@ -47,8 +47,8 @@ To perform MAZE and DFME attacks, including baseline, width expansion, and MEBoo
 ```bash
 python mebooster/adversarial/dfme_attacker.py
 ```
-1 Adjust attack parameters in `config.py`, specifying `test_dataset`, `attack_model_arch`, 'over_factor', 'attack_set' and `victim_model_arch`.
-2 Set main_args.attack_type='DISGUIDE'/'MAZE'/'DFME' to choose the attack type; Set main_args.ini=True to activate the 'rescaling initialization' phase.
+1 Adjust attack parameters in `config.py`, specifying `test_dataset`, `attack_model_arch`, `over_factor`, `attack_set` and `victim_model_arch`.
+2 Set `main_args.attack_type='DISGUIDE'/'MAZE'/'DFME'` to choose the attack type; Set `main_args.ini=True` to activate the 'rescaling initialization' phase.
 
 ### 4. Post-processing Fine Tuning
 
