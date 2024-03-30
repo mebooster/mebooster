@@ -45,10 +45,10 @@ Parameters for estimation are specified within the script. The output path defau
 To perform MAZE and DFME attacks, including baseline, width expansion, and MEBooster variations without constrained gradient backpropagation, use:
 
 ```bash
-python mebooster/adversarial/dfme_attacker.py attack_type='DISGUIDE'/'MAZE'/'DFME'
+python mebooster/adversarial/dfme_attacker.py
 ```
-
-Adjust attack parameters in `config.py`, specifying `test_dataset`, `attack_model_arch`, and `victim_model_arch`.
+1 Adjust attack parameters in `config.py`, specifying `test_dataset`, `attack_model_arch`, 'over_factor', 'attack_set' and `victim_model_arch`.
+2 Set main_args.attack_type='DISGUIDE'/'MAZE'/'DFME' to choose the attack type; Set main_args.ini=True to activate the 'rescaling initialization' phase.
 
 ### 4. Post-processing Fine Tuning
 
